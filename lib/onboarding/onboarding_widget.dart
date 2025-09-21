@@ -33,8 +33,12 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
     super.initState();
     _model = createModel(context, () => OnboardingModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
+    _model.textController1 ??= TextEditingController();
+    _model.textFieldFocusNode1 ??= FocusNode();
+
+    _model.textController2 ??= TextEditingController(
+        text: valueOrDefault(currentUserDocument?.age, 0).toString());
+    _model.textFieldFocusNode2 ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -218,10 +222,10 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                           Container(
                             width: double.infinity,
                             child: TextFormField(
-                              controller: _model.textController,
-                              focusNode: _model.textFieldFocusNode,
+                              controller: _model.textController1,
+                              focusNode: _model.textFieldFocusNode1,
                               onChanged: (_) => EasyDebounce.debounce(
-                                '_model.textController',
+                                '_model.textController1',
                                 Duration(milliseconds: 2000),
                                 () => safeSetState(() {}),
                               ),
@@ -303,10 +307,10 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 contentPadding: EdgeInsetsDirectional.fromSTEB(
                                     24.0, 26.0, 24.0, 26.0),
                                 suffixIcon:
-                                    _model.textController!.text.isNotEmpty
+                                    _model.textController1!.text.isNotEmpty
                                         ? InkWell(
                                             onTap: () async {
-                                              _model.textController?.clear();
+                                              _model.textController1?.clear();
                                               safeSetState(() {});
                                             },
                                             child: Icon(
@@ -339,13 +343,13 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                               cursorColor:
                                   FlutterFlowTheme.of(context).primaryText,
                               enableInteractiveSelection: true,
-                              validator: _model.textControllerValidator
+                              validator: _model.textController1Validator
                                   .asValidator(context),
                             ),
                           ),
                           FFButtonWidget(
                             onPressed: () async {
-                              final _datePicked1Date = await showDatePicker(
+                              final _datePickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: getCurrentTimestamp,
                                 firstDate: DateTime(1900),
@@ -395,17 +399,17 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 },
                               );
 
-                              if (_datePicked1Date != null) {
+                              if (_datePickedDate != null) {
                                 safeSetState(() {
-                                  _model.datePicked1 = DateTime(
-                                    _datePicked1Date.year,
-                                    _datePicked1Date.month,
-                                    _datePicked1Date.day,
+                                  _model.datePicked = DateTime(
+                                    _datePickedDate.year,
+                                    _datePickedDate.month,
+                                    _datePickedDate.day,
                                   );
                                 });
-                              } else if (_model.datePicked1 != null) {
+                              } else if (_model.datePicked != null) {
                                 safeSetState(() {
-                                  _model.datePicked1 = getCurrentTimestamp;
+                                  _model.datePicked = getCurrentTimestamp;
                                 });
                               }
                             },
@@ -452,113 +456,152 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                               borderRadius: BorderRadius.circular(24.0),
                             ),
                           ),
-                          FFButtonWidget(
-                            onPressed: () async {
-                              final _datePicked2Date = await showDatePicker(
-                                context: context,
-                                initialDate: getCurrentTimestamp,
-                                firstDate: DateTime(1900),
-                                lastDate: getCurrentTimestamp,
-                                builder: (context, child) {
-                                  return wrapInMaterialDatePickerTheme(
-                                    context,
-                                    child!,
-                                    headerBackgroundColor:
-                                        FlutterFlowTheme.of(context).primary,
-                                    headerForegroundColor:
-                                        FlutterFlowTheme.of(context).info,
-                                    headerTextStyle:
-                                        FlutterFlowTheme.of(context)
-                                            .headlineLarge
-                                            .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .headlineLarge
-                                                        .fontStyle,
-                                              ),
-                                              fontSize: 32.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w600,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .headlineLarge
-                                                      .fontStyle,
-                                            ),
-                                    pickerBackgroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                    pickerForegroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                    selectedDateTimeBackgroundColor:
-                                        FlutterFlowTheme.of(context).primary,
-                                    selectedDateTimeForegroundColor:
-                                        FlutterFlowTheme.of(context).info,
-                                    actionButtonForegroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                    iconSize: 24.0,
-                                  );
-                                },
-                              );
-
-                              if (_datePicked2Date != null) {
-                                safeSetState(() {
-                                  _model.datePicked2 = DateTime(
-                                    _datePicked2Date.year,
-                                    _datePicked2Date.month,
-                                    _datePicked2Date.day,
-                                  );
-                                });
-                              } else if (_model.datePicked2 != null) {
-                                safeSetState(() {
-                                  _model.datePicked2 = getCurrentTimestamp;
-                                });
-                              }
-                            },
-                            text: 'Set Age',
-                            icon: Icon(
-                              Icons.calendar_today,
-                              size: 15.0,
-                            ),
-                            options: FFButtonOptions(
-                              width: double.infinity,
-                              height: 70.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 16.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .labelMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    fontSize: 20.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontStyle,
+                          Form(
+                            key: _model.formKey,
+                            autovalidateMode: AutovalidateMode.disabled,
+                            child: AuthUserStreamWidget(
+                              builder: (context) => Container(
+                                width: double.infinity,
+                                child: TextFormField(
+                                  controller: _model.textController2,
+                                  focusNode: _model.textFieldFocusNode2,
+                                  onChanged: (_) => EasyDebounce.debounce(
+                                    '_model.textController2',
+                                    Duration(milliseconds: 2000),
+                                    () => safeSetState(() {}),
                                   ),
-                              elevation: 0.0,
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primaryText,
+                                  autofocus: false,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    labelStyle: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .override(
+                                          font: GoogleFonts.inter(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontStyle,
+                                        ),
+                                    hintText: 'Age',
+                                    hintStyle: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .override(
+                                          font: GoogleFonts.inter(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontStyle,
+                                        ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(24.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(24.0),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            FlutterFlowTheme.of(context).error,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(24.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            FlutterFlowTheme.of(context).error,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(24.0),
+                                    ),
+                                    filled: true,
+                                    fillColor: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    contentPadding:
+                                        EdgeInsetsDirectional.fromSTEB(
+                                            24.0, 26.0, 24.0, 26.0),
+                                    suffixIcon: _model
+                                            .textController2!.text.isNotEmpty
+                                        ? InkWell(
+                                            onTap: () async {
+                                              _model.textController2?.clear();
+                                              safeSetState(() {});
+                                            },
+                                            child: Icon(
+                                              Icons.clear,
+                                              size: 24.0,
+                                            ),
+                                          )
+                                        : null,
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                  keyboardType: TextInputType.number,
+                                  cursorColor:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  enableInteractiveSelection: true,
+                                  validator: _model.textController2Validator
+                                      .asValidator(context),
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(24.0),
                             ),
                           ),
                         ].divide(SizedBox(height: 24.0)),
@@ -568,8 +611,8 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                   FFButtonWidget(
                     onPressed: () async {
                       await currentUserReference!.update(createUsersRecordData(
-                        displayName: _model.textController.text,
-                        birthday: _model.datePicked1,
+                        displayName: _model.textController2.text,
+                        birthday: _model.datePicked,
                       ));
 
                       context.goNamed(TasksWidget.routeName);
