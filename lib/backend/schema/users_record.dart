@@ -50,9 +50,9 @@ class UsersRecord extends FirestoreRecord {
   DateTime? get birthday => _birthday;
   bool hasBirthday() => _birthday != null;
 
-  // "Age" field.
-  DateTime? _age;
-  DateTime? get age => _age;
+  // "age" field.
+  int? _age;
+  int get age => _age ?? 0;
   bool hasAge() => _age != null;
 
   void _initializeFields() {
@@ -63,7 +63,7 @@ class UsersRecord extends FirestoreRecord {
     _createdTime = snapshotData['created_time'] as DateTime?;
     _phoneNumber = snapshotData['phone_number'] as String?;
     _birthday = snapshotData['birthday'] as DateTime?;
-    _age = snapshotData['Age'] as DateTime?;
+    _age = castToType<int>(snapshotData['age']);
   }
 
   static CollectionReference get collection =>
@@ -107,7 +107,7 @@ Map<String, dynamic> createUsersRecordData({
   DateTime? createdTime,
   String? phoneNumber,
   DateTime? birthday,
-  DateTime? age,
+  int? age,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -118,7 +118,7 @@ Map<String, dynamic> createUsersRecordData({
       'created_time': createdTime,
       'phone_number': phoneNumber,
       'birthday': birthday,
-      'Age': age,
+      'age': age,
     }.withoutNulls,
   );
 
