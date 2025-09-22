@@ -103,8 +103,8 @@ class _DetailsWidgetState extends State<DetailsWidget> {
                               color: FlutterFlowTheme.of(context).secondaryText,
                               size: 30.0,
                             ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
+                            onPressed: () async {
+                              context.safePop();
                             },
                           ),
                           FlutterFlowIconButton(
