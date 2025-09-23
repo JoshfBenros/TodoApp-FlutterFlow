@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "User",
+  "description": "Schema for user documents in Firestore (users collection).",
+  "type": "object",
+  "properties": {
+    "uid": {
+      "type": "string",
+      "description": "Unique identifier for the user; also the document ID."
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "User's email address."
+    },
+    "display_name": {
+      "type": "string",
+      "description": "User's display name."
+    },
+    "created_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the user document was created."
+    },
+    "birthday": {
+      "type": "string",
+      "format": "date-time",
+      "description": "User's birthday as a timestamp."
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "User's age in years."
+    }
+  },
+  "required": ["uid", "email", "display_name", "created_time"],
+  "additionalProperties": false
+}
