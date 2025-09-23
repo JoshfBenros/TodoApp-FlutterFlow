@@ -611,8 +611,9 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                   FFButtonWidget(
                     onPressed: () async {
                       await currentUserReference!.update(createUsersRecordData(
-                        displayName: _model.textController2.text,
+                        displayName: _model.textController1.text,
                         birthday: _model.datePicked,
+                        age: int.tryParse(_model.textController2.text),
                       ));
 
                       context.goNamed(TasksWidget.routeName);
