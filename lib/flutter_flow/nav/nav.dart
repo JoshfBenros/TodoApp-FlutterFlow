@@ -77,13 +77,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? LogoutWidget() : LoginWidget(),
+          appStateNotifier.loggedIn ? CompletedWidget() : LoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? LogoutWidget() : LoginWidget(),
+              appStateNotifier.loggedIn ? CompletedWidget() : LoginWidget(),
         ),
         FFRoute(
           name: LoginWidget.routeName,
