@@ -29,10 +29,6 @@ class ZenQuotesCall {
         response,
         r'''$[:].q''',
       ));
-  static String? author(dynamic response) => castToType<String>(getJsonField(
-        response,
-        r'''$[:].a''',
-      ));
 }
 
 class ApiPagingParams {
