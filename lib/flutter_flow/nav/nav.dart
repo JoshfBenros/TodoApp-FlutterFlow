@@ -77,23 +77,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? CompletedWidget() : LoginWidget(),
+          appStateNotifier.loggedIn ? TasksWidget() : LoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? CompletedWidget() : LoginWidget(),
+              appStateNotifier.loggedIn ? TasksWidget() : LoginWidget(),
         ),
         FFRoute(
           name: LoginWidget.routeName,
           path: LoginWidget.routePath,
           builder: (context, params) => LoginWidget(),
-        ),
-        FFRoute(
-          name: TasksWidget.routeName,
-          path: TasksWidget.routePath,
-          builder: (context, params) => TasksWidget(),
         ),
         FFRoute(
           name: OnboardingWidget.routeName,
@@ -122,6 +117,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: LogoutWidget.routeName,
           path: LogoutWidget.routePath,
           builder: (context, params) => LogoutWidget(),
+        ),
+        FFRoute(
+          name: TasksWidget.routeName,
+          path: TasksWidget.routePath,
+          builder: (context, params) => TasksWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
